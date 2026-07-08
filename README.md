@@ -38,11 +38,11 @@ Decidí entregar el programa con la base de datos totalmente limpia. Creo que no
 
 2. Activar el entorno virtual:
 
-En Windows:
+   En Windows:
    ```powershell
    .venv\Scripts\activate
    ```
-En macOS y Linux:
+   En macOS y Linux:
    ```bash
    source .venv/bin/activate
    ```
