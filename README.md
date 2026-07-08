@@ -66,6 +66,9 @@ Nota: Los comandos de activacion podrian variar segun el sistema operativo
 ## Tecnologías y Librerías que usé
 Para este proyecto dividí el uso de herramientas entre las nativas de Python y un par de externas para mejorar la interfaz y el manejo de datos:
 
+**Lenguaje utilizado:**
+* `Python`: Lenguaje principal utilizado para el desarrollo del sistema.
+
 **Librerías Externas (requieren instalación):**
 * `customtkinter`: Para diseñar una interfaz gráfica moderna, modular y en modo oscuro.
 * `pandas`: Para procesar el historial de ventas y calcular las estadísticas globales en la auditoría.
