@@ -61,7 +61,6 @@ Decidí entregar el programa con la base de datos totalmente limpia. Creo que no
 
 7. Revisar la pestaña **Auditoría** para ver cómo se registró el turno.
 
-Nota: Los comandos de activacion podrian variar segun el sistema operativo
 
 ## Tecnologías y Librerías que usé
 Para este proyecto dividí el uso de herramientas entre las nativas de Python y un par de externas para mejorar la interfaz y el manejo de datos:
