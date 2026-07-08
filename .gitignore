@@ -1,9 +1,15 @@
 .venv/
 venv/
+env/
 __pycache__/
 *.py[cod]
 *$py.class
+*.log
+*.json
+*.tmp
+*.temp
 .vscode/
-.env
-Thumbs.db
+.idea/
 .DS_Store
+Thumbs.db
+.env
