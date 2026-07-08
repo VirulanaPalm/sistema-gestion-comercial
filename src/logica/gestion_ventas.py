@@ -7,14 +7,11 @@ stock de productos.
 import pandas as pd
 from datetime import datetime
 from src.utils.persistencia import cargar_datos, guardar_datos
-from src.logica.gestion_productos import (
-    buscar_producto_por_id, 
-    modificar_stock
-)
+from src.logica.gestion_productos import buscar_producto_por_id, modificar_stock
 from src.utils.logger import registrar_movimiento
 from src.logica.gestion_caja import obtener_estado_caja
 
-RUTA_VENTAS = 'data/ventas.json'
+RUTA_VENTAS = "data/ventas.json"
 
 
 def registrar_ticket(carrito: list) -> dict:
@@ -36,8 +33,7 @@ def registrar_ticket(carrito: list) -> dict:
     caja = obtener_estado_caja()
     if caja["estado"] == "cerrada":
         raise PermissionError(
-            "La caja está cerrada. Debes abrirla antes de vender."
-        )
+            "La caja está cerrada. Debes abrirla antes de vender.")
 
     if not carrito:
         raise ValueError("El carrito está vacío.")
@@ -46,8 +42,7 @@ def registrar_ticket(carrito: list) -> dict:
         producto = buscar_producto_por_id(item["id_producto"])
         if not producto:
             raise ValueError(
-                f"El producto ID {item['id_producto']} ya no existe."
-            )
+                f"El producto ID {item['id_producto']} ya no existe.")
         if producto["stock"] < item["cantidad"]:
             raise ValueError(
                 f"Stock insuficiente para '{producto['nombre']}'. "
@@ -62,27 +57,27 @@ def registrar_ticket(carrito: list) -> dict:
     ventas = cargar_datos(RUTA_VENTAS)
     id_ticket = len(ventas) + 1 if ventas else 1
     total_ticket = sum(item["subtotal"] for item in carrito)
-    
+
     nuevo_ticket = {
         "id_ticket": id_ticket,
         "fecha": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "ciclo_id": caja["ciclo_actual"],
         "items": carrito,
-        "total_ticket": total_ticket
+        "total_ticket": total_ticket,
     }
-    
+
     ventas.append(nuevo_ticket)
     guardar_datos(RUTA_VENTAS, ventas)
-    
+
     resumen_items = ", ".join(
         [f"{i['cantidad']}x {i['nombre_producto']}" for i in carrito]
     )
-    
+
     registrar_movimiento(
         f"VENTA TICKET #{id_ticket}: [{resumen_items}]. "
         f"Total: ${total_ticket} (Ciclo {caja['ciclo_actual']})"
     )
-    
+
     return nuevo_ticket
 
 
@@ -93,34 +88,32 @@ def mostrar_estadisticas() -> dict:
 
     Returns:
         dict: Diccionario con las métricas clave (Total de Ingresos,
-              Tickets Emitidos, Unidades Vendidas y Producto más 
+              Tickets Emitidos, Unidades Vendidas y Producto más
               vendido histórico).
     """
     ventas = cargar_datos(RUTA_VENTAS)
     if not ventas:
         return {"mensaje": "Aún no hay ventas registradas."}
-        
+
     df_tickets = pd.DataFrame(ventas)
-    
+
     items_planos = []
     for ticket in ventas:
         for item in ticket["items"]:
             items_planos.append(item)
     df_items = pd.DataFrame(items_planos)
-    
-    total_ingresos = df_tickets['total_ticket'].sum()
-    total_unidades = df_items['cantidad'].sum()
-    ventas_agrupadas = df_items.groupby('nombre_producto')['cantidad'].sum()
+
+    total_ingresos = df_tickets["total_ticket"].sum()
+    total_unidades = df_items["cantidad"].sum()
+    ventas_agrupadas = df_items.groupby("nombre_producto")["cantidad"].sum()
     producto_top = ventas_agrupadas.idxmax()
     amount_top = ventas_agrupadas.max()
-    
+
     return {
         "Total de Ingresos": f"${total_ingresos:.2f}",
         "Tickets Emitidos": str(len(ventas)),
         "Unidades Vendidas": str(int(total_unidades)),
-        "Producto más vendido histórico": (
-            f"{producto_top} ({amount_top} un.)"
-        )
+        "Producto más vendido histórico": (f"{producto_top} ({amount_top} un.)"),
     }
 
 

@@ -6,7 +6,7 @@ Permite realizar operaciones de listado, búsqueda, alta, modificación y baja.
 from src.utils.persistencia import cargar_datos, guardar_datos
 from src.utils.logger import registrar_movimiento
 
-RUTA_PRODUCTOS = 'data/productos.json'
+RUTA_PRODUCTOS = "data/productos.json"
 
 
 def listar_productos() -> list:
@@ -31,16 +31,16 @@ def buscar_productos(consulta: str) -> list:
     """
     productos = cargar_datos(RUTA_PRODUCTOS)
     consulta = str(consulta).strip().lower()
-    
+
     if not consulta:
         return productos
-        
+
     resultados = []
     for p in productos:
-        
+
         if str(p["id"]) == consulta or consulta in p["nombre"].lower():
             resultados.append(p)
-            
+
     return resultados
 
 
@@ -63,24 +63,24 @@ def agregar_producto(nombre: str, precio: float, stock: int) -> dict:
         raise ValueError("Precio y stock deben ser valores positivos.")
 
     productos = cargar_datos(RUTA_PRODUCTOS)
-    
+
     nuevo_id = max([producto["id"] for producto in productos], default=0) + 1
-        
+
     nuevo_producto = {
         "id": nuevo_id,
         "nombre": nombre,
         "precio": precio,
-        "stock": stock
+        "stock": stock,
     }
-    
+
     productos.append(nuevo_producto)
     guardar_datos(RUTA_PRODUCTOS, productos)
-    
+
     registrar_movimiento(
         f"ALTA: Se agregó el producto '{nombre}' "
         f"(ID: {nuevo_id}) con {stock} unidades."
     )
-    
+
     return nuevo_producto
 
 
@@ -123,9 +123,9 @@ def modificar_stock(id_producto: int, nueva_cantidad: int) -> bool:
 
 def modificar_producto(
     id_producto: int,
-    nuevo_nombre: str = None, 
+    nuevo_nombre: str = None,
     nuevo_precio: float = None,
-    nuevo_stock: int = None
+    nuevo_stock: int = None,
 ) -> bool:
     """
     Modifica atributos de un producto. Si es None, se conserva el anterior.
@@ -142,7 +142,7 @@ def modificar_producto(
 
     precio_invalido = nuevo_precio is not None and nuevo_precio <= 0
     stock_invalido = nuevo_stock is not None and nuevo_stock < 0
-    
+
     if precio_invalido or stock_invalido:
         raise ValueError("Valores de precio o stock no válidos.")
 
@@ -152,16 +152,16 @@ def modificar_producto(
             nombre_viejo = producto["nombre"]
             precio_viejo = producto["precio"]
             stock_viejo = producto["stock"]
-            
+
             if nuevo_nombre:
                 producto["nombre"] = nuevo_nombre
             if nuevo_precio is not None:
                 producto["precio"] = nuevo_precio
             if nuevo_stock is not None:
                 producto["stock"] = nuevo_stock
-            
+
             guardar_datos(RUTA_PRODUCTOS, productos)
-            
+
             registrar_movimiento(
                 f"MODIFICACIÓN: Producto ID {id_producto}. "
                 f"Antes '{nombre_viejo}' (${precio_viejo} | {stock_viejo} un.). "
@@ -183,21 +183,19 @@ def eliminar_producto(id_producto: int) -> bool:
         bool: True si se eliminó el producto, False si no se encontró.
     """
     productos = cargar_datos(RUTA_PRODUCTOS)
-    
+
     producto_a_borrar = next(
-        (p for p in productos if p["id"] == id_producto), 
-        None
-    )
-    
+        (p for p in productos if p["id"] == id_producto), None)
+
     if producto_a_borrar:
         productos_filtrados = [p for p in productos if p["id"] != id_producto]
         guardar_datos(RUTA_PRODUCTOS, productos_filtrados)
-        
+
         # Se formatea el string largo
         registrar_movimiento(
             f"BAJA: Se eliminó el producto '{producto_a_borrar['nombre']}' "
             f"(ID: {id_producto})."
         )
         return True
-        
+
     return False

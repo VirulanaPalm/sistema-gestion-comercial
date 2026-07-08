@@ -25,7 +25,7 @@ def cargar_datos(nombre_archivo: str) -> list:
         return []
 
     try:
-        with open(nombre_archivo, 'r', encoding='utf-8') as f:
+        with open(nombre_archivo, "r", encoding="utf-8") as f:
             return json.load(f)
     except (json.JSONDecodeError, IOError):
         return []
@@ -46,7 +46,7 @@ def guardar_datos(nombre_archivo: str, datos: list) -> None:
         None
     """
     try:
-        with open(nombre_archivo, 'w', encoding='utf-8') as f:
+        with open(nombre_archivo, "w", encoding="utf-8") as f:
             json.dump(datos, f, indent=4, ensure_ascii=False)
     except IOError as e:
         print(f"Error al guardar los datos en {nombre_archivo}: {e}")

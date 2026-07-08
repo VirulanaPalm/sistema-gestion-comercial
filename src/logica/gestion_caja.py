@@ -1,6 +1,6 @@
 """
 Módulo para la gestión del estado de la caja registradora.
-Permite obtener, guardar, abrir y cerrar la caja, llevando un registro 
+Permite obtener, guardar, abrir y cerrar la caja, llevando un registro
 del turno o ciclo actual.
 """
 
@@ -10,7 +10,7 @@ from datetime import datetime
 
 from src.utils.logger import registrar_movimiento
 
-RUTA_CAJA = 'data/caja.json'
+RUTA_CAJA = "data/caja.json"
 
 
 def obtener_estado_caja() -> dict:
@@ -26,13 +26,13 @@ def obtener_estado_caja() -> dict:
             "estado": "cerrada",
             "hora_apertura": None,
             "hora_cierre": None,
-            "ciclo_actual": 0
+            "ciclo_actual": 0,
         }
         _guardar_estado(estado_inicial)
         return estado_inicial
-        
+
     try:
-        with open(RUTA_CAJA, 'r', encoding='utf-8') as f:
+        with open(RUTA_CAJA, "r", encoding="utf-8") as f:
             estado = json.load(f)
             if "ciclo_actual" not in estado:
                 estado["ciclo_actual"] = 0
@@ -42,7 +42,7 @@ def obtener_estado_caja() -> dict:
             "estado": "cerrada",
             "hora_apertura": None,
             "hora_cierre": None,
-            "ciclo_actual": 0
+            "ciclo_actual": 0,
         }
 
 
@@ -53,7 +53,7 @@ def _guardar_estado(estado: dict) -> None:
     Args:
         estado (dict): Información actualizada de la caja.
     """
-    with open(RUTA_CAJA, 'w', encoding='utf-8') as f:
+    with open(RUTA_CAJA, "w", encoding="utf-8") as f:
         json.dump(estado, f, indent=4, ensure_ascii=False)
 
 
@@ -66,17 +66,18 @@ def abrir_caja() -> bool:
     estado = obtener_estado_caja()
     if estado["estado"] == "abierta":
         return False
-        
+
     estado["estado"] = "abierta"
-    estado["ciclo_actual"] += 1 
+    estado["ciclo_actual"] += 1
     estado["hora_apertura"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     _guardar_estado(estado)
-    
+
     registrar_movimiento(
         f"CAJA: Apertura (Ciclo {estado['ciclo_actual']}) "
         f"a las {estado['hora_apertura']}"
     )
     return True
+
 
 def cerrar_caja() -> bool:
     """
@@ -88,7 +89,7 @@ def cerrar_caja() -> bool:
     estado = obtener_estado_caja()
     if estado["estado"] == "cerrada":
         return False
-        
+
     estado["estado"] = "cerrada"
     estado["hora_cierre"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     _guardar_estado(estado)

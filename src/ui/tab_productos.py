@@ -7,18 +7,18 @@ y visualizar el stock actualizado mediante una tabla interactiva.
 import customtkinter as ctk
 from tkinter import messagebox, ttk
 from src.logica.gestion_productos import (
-    listar_productos, 
-    agregar_producto, 
-    eliminar_producto, 
-    modificar_producto, 
-    buscar_productos
+    listar_productos,
+    agregar_producto,
+    eliminar_producto,
+    modificar_producto,
+    buscar_productos,
 )
 
 
 class TabProductos(ctk.CTkFrame):
     """
     Clase que representa la pestaña de Gestión de Productos en la aplicación.
-    Proporciona los formularios y la tabla para realizar operaciones CRUD 
+    Proporciona los formularios y la tabla para realizar operaciones CRUD
     sobre el inventario.
     Hereda de ctk.CTkFrame.
     """
@@ -29,17 +29,17 @@ class TabProductos(ctk.CTkFrame):
 
         Args:
             master: El widget padre (contenedor de pestañas).
-            app: La instancia principal de la aplicación para comunicarse 
+            app: La instancia principal de la aplicación para comunicarse
                  con otras vistas.
         """
         super().__init__(master, fg_color="transparent")
-        self.app = app  
+        self.app = app
         self.setup_ui()
 
     def setup_ui(self) -> None:
         """
         Configura e inicializa todos los componentes visuales de la pestaña,
-        incluyendo los formularios de entrada, los botones de acción y la 
+        incluyendo los formularios de entrada, los botones de acción y la
         tabla de datos.
 
         Returns:
@@ -49,31 +49,20 @@ class TabProductos(ctk.CTkFrame):
         frame_add.pack(pady=5, fill="x")
 
         self.entry_nombre = ctk.CTkEntry(
-            frame_add, 
-            placeholder_text="Nombre", 
-            width=150
+            frame_add, placeholder_text="Nombre", width=150
         )
         self.entry_nombre.pack(side="left", padx=5)
 
         self.entry_precio = ctk.CTkEntry(
-            frame_add, 
-            placeholder_text="Precio", 
-            width=90
-        )
+            frame_add, placeholder_text="Precio", width=90)
         self.entry_precio.pack(side="left", padx=5)
 
         self.entry_stock = ctk.CTkEntry(
-            frame_add, 
-            placeholder_text="Stock", 
-            width=90
-        )
+            frame_add, placeholder_text="Stock", width=90)
         self.entry_stock.pack(side="left", padx=5)
 
         btn_agregar = ctk.CTkButton(
-            frame_add, 
-            text="Agregar", 
-            command=self.evento_agregar_producto, 
-            width=100
+            frame_add, text="Agregar", command=self.evento_agregar_producto, width=100
         )
         btn_agregar.pack(side="left", padx=10)
 
@@ -81,40 +70,32 @@ class TabProductos(ctk.CTkFrame):
         frame_edit.pack(pady=5, fill="x")
 
         self.entry_id_edit = ctk.CTkEntry(
-            frame_edit, 
-            placeholder_text="ID a Editar", 
-            width=80
+            frame_edit, placeholder_text="ID a Editar", width=80
         )
         self.entry_id_edit.pack(side="left", padx=5)
 
         self.entry_nombre_edit = ctk.CTkEntry(
-            frame_edit, 
-            placeholder_text="Nuevo Nombre", 
-            width=150
+            frame_edit, placeholder_text="Nuevo Nombre", width=150
         )
         self.entry_nombre_edit.pack(side="left", padx=5)
 
         self.entry_precio_edit = ctk.CTkEntry(
-            frame_edit, 
-            placeholder_text="Nuevo Precio", 
-            width=90
+            frame_edit, placeholder_text="Nuevo Precio", width=90
         )
         self.entry_precio_edit.pack(side="left", padx=5)
 
         self.entry_stock_edit = ctk.CTkEntry(
-            frame_edit, 
-            placeholder_text="Nuevo Stock", 
-            width=90
+            frame_edit, placeholder_text="Nuevo Stock", width=90
         )
         self.entry_stock_edit.pack(side="left", padx=5)
 
         btn_editar = ctk.CTkButton(
-            frame_edit, 
-            text="Modificar", 
-            fg_color="#F57C00", 
-            hover_color="#E65100", 
-            command=self.evento_modificar_producto, 
-            width=100
+            frame_edit,
+            text="Modificar",
+            fg_color="#F57C00",
+            hover_color="#E65100",
+            command=self.evento_modificar_producto,
+            width=100,
         )
         btn_editar.pack(side="left", padx=10)
 
@@ -122,19 +103,17 @@ class TabProductos(ctk.CTkFrame):
         frame_delete.pack(pady=5, fill="x")
 
         self.entry_id_eliminar = ctk.CTkEntry(
-            frame_delete, 
-            placeholder_text="ID a Eliminar", 
-            width=110
+            frame_delete, placeholder_text="ID a Eliminar", width=110
         )
         self.entry_id_eliminar.pack(side="left", padx=5)
 
         btn_eliminar = ctk.CTkButton(
-            frame_delete, 
-            text="Eliminar", 
-            fg_color="#D32F2F", 
-            hover_color="#9A0007", 
-            command=self.evento_eliminar_producto, 
-            width=100
+            frame_delete,
+            text="Eliminar",
+            fg_color="#D32F2F",
+            hover_color="#9A0007",
+            command=self.evento_eliminar_producto,
+            width=100,
         )
         btn_eliminar.pack(side="left", padx=10)
 
@@ -142,34 +121,27 @@ class TabProductos(ctk.CTkFrame):
         frame_search.pack(pady=10, fill="x")
 
         self.entry_buscar = ctk.CTkEntry(
-            frame_search, 
-            placeholder_text="Buscar por nombre o ID...", 
-            width=200
+            frame_search, placeholder_text="Buscar por nombre o ID...", width=200
         )
         self.entry_buscar.pack(side="left", padx=5)
 
         btn_buscar = ctk.CTkButton(
-            frame_search, 
-            text="Buscar", 
-            command=self.evento_buscar_producto, 
-            width=90
+            frame_search, text="Buscar", command=self.evento_buscar_producto, width=90
         )
         btn_buscar.pack(side="left", padx=5)
 
         btn_ver_todos = ctk.CTkButton(
-            frame_search, 
-            text="Ver Todos", 
-            fg_color="gray", 
-            hover_color="darkgray", 
-            command=self.evento_limpiar_busqueda, 
-            width=90
+            frame_search,
+            text="Ver Todos",
+            fg_color="gray",
+            hover_color="darkgray",
+            command=self.evento_limpiar_busqueda,
+            width=90,
         )
         btn_ver_todos.pack(side="left", padx=5)
 
         self.lbl_alerta_stock = ctk.CTkLabel(
-            self, 
-            text="Verificando stock...", 
-            font=("Arial", 12, "bold")
+            self, text="Verificando stock...", font=("Arial", 12, "bold")
         )
         self.lbl_alerta_stock.pack(pady=2)
 
@@ -180,10 +152,10 @@ class TabProductos(ctk.CTkFrame):
         scroll_y.pack(side="right", fill="y")
 
         self.tree_productos = ttk.Treeview(
-            frame_tabla, 
-            columns=("ID", "Producto", "Precio", "Stock"), 
-            show="headings", 
-            yscrollcommand=scroll_y.set
+            frame_tabla,
+            columns=("ID", "Producto", "Precio", "Stock"),
+            show="headings",
+            yscrollcommand=scroll_y.set,
         )
         self.tree_productos.pack(side="left", fill="both", expand=True)
         scroll_y.configure(command=self.tree_productos.yview)
@@ -215,19 +187,15 @@ class TabProductos(ctk.CTkFrame):
             if nombre:
                 agregar_producto(nombre, precio, stock)
                 self.app.actualizar_todo()
-                self.entry_nombre.delete(0, 'end')
-                self.entry_precio.delete(0, 'end')
-                self.entry_stock.delete(0, 'end')
+                self.entry_nombre.delete(0, "end")
+                self.entry_precio.delete(0, "end")
+                self.entry_stock.delete(0, "end")
             else:
                 messagebox.showerror(
-                    "Error", 
-                    "El nombre no puede estar vacío."
-                )
+                    "Error", "El nombre no puede estar vacío.")
         except ValueError:
             messagebox.showerror(
-                "Error", 
-                "Precio y stock deben ser numéricos."
-            )
+                "Error", "Precio y stock deben ser numéricos.")
 
     def evento_modificar_producto(self) -> None:
         """
@@ -242,17 +210,17 @@ class TabProductos(ctk.CTkFrame):
             if not id_str:
                 return
             id_prod = int(id_str)
-            
+
             n_nom = self.entry_nombre_edit.get().strip() or None
             n_pre_str = self.entry_precio_edit.get().strip()
             n_sto_str = self.entry_stock_edit.get().strip()
-            
+
             n_pre = float(n_pre_str) if n_pre_str else None
             n_sto = int(n_sto_str) if n_sto_str else None
-            
+
             if n_nom is None and n_pre is None and n_sto is None:
                 return
-                
+
             if modificar_producto(id_prod, n_nom, n_pre, n_sto):
                 self.app.actualizar_todo()
             else:
@@ -297,18 +265,18 @@ class TabProductos(ctk.CTkFrame):
         Returns:
             None
         """
-        self.entry_buscar.delete(0, 'end')
+        self.entry_buscar.delete(0, "end")
         self.actualizar_lista_productos()
 
     def actualizar_lista_productos(self, productos_a_mostrar: list = None) -> None:
         """
         Refresca el contenido del Treeview (tabla) con los productos actuales.
-        Además, actualiza la alerta visual si existen artículos con 
+        Además, actualiza la alerta visual si existen artículos con
         stock crítico.
 
         Args:
             productos_a_mostrar (list, optional): Lista filtrada de productos a
-                                                  visualizar. Si es None, se 
+                                                  visualizar. Si es None, se
                                                   muestran todos.
 
         Returns:
@@ -316,36 +284,28 @@ class TabProductos(ctk.CTkFrame):
         """
         for item in self.tree_productos.get_children():
             self.tree_productos.delete(item)
-            
+
         todos_los_productos = listar_productos()
         if productos_a_mostrar is not None:
             productos = productos_a_mostrar
         else:
             productos = todos_los_productos
-        
+
         for p in productos:
             self.tree_productos.insert(
-                "", 
-                "end", 
-                values=(
-                    p['id'], 
-                    p['nombre'], 
-                    f"${p['precio']:.2f}", 
-                    p['stock']
-                )
+                "",
+                "end",
+                values=(p["id"], p["nombre"],
+                        f"${p['precio']:.2f}", p["stock"]),
             )
-                
+
         criticos = [p for p in todos_los_productos if p["stock"] < 5]
         if criticos:
-            nombres = " - ".join(
-                [f"{p['nombre']} ({p['stock']})" for p in criticos]
-            )
+            nombres = " - ".join([f"{p['nombre']} ({p['stock']})" for p in criticos])
             self.lbl_alerta_stock.configure(
-                text=f"STOCK CRÍTICO (< 5 unidades): {nombres}", 
-                text_color="#F44336"
+                text=f"STOCK CRÍTICO (< 5 unidades): {nombres}", text_color="#F44336"
             )
         else:
             self.lbl_alerta_stock.configure(
-                text="Stock saludable (> 5 unidades)", 
-                text_color="#4CAF50"
+                text="Stock saludable (> 5 unidades)", text_color="#4CAF50"
             )

@@ -1,6 +1,6 @@
 """
 Módulo principal de la aplicación.
-Contiene la ventana base del sistema de gestión comercial, 
+Contiene la ventana base del sistema de gestión comercial,
 encargada de inicializar y coordinar las diferentes pestañas (vistas).
 """
 
@@ -25,7 +25,7 @@ class AppComercial(ctk.CTk):
         el tamaño de la ventana y agrega las pestañas de navegación al sistema.
         """
         super().__init__()
-        
+
         self.title("Sistema de Gestión Comercial")
         self.geometry("700x750")
         ctk.set_appearance_mode("dark")
@@ -55,7 +55,7 @@ class AppComercial(ctk.CTk):
 
     def configurar_estilo_tablas(self) -> None:
         """
-        Configura el estilo visual para todas las tablas (Treeview) 
+        Configura el estilo visual para todas las tablas (Treeview)
         utilizadas a lo largo de la aplicación para que respeten el modo oscuro.
 
         Returns:
@@ -63,32 +63,32 @@ class AppComercial(ctk.CTk):
         """
         style = ttk.Style()
         style.theme_use("default")
-        
+
         style.configure(
-            "Treeview", 
-            background="#2b2b2b", 
-            foreground="white", 
-            rowheight=25, 
-            fieldbackground="#2b2b2b", 
-            bordercolor="#343638", 
-            borderwidth=0
+            "Treeview",
+            background="#2b2b2b",
+            foreground="white",
+            rowheight=25,
+            fieldbackground="#2b2b2b",
+            bordercolor="#343638",
+            borderwidth=0,
         )
-        
-        style.map('Treeview', background=[('selected', '#1f538d')])
-        
+
+        style.map("Treeview", background=[("selected", "#1f538d")])
+
         style.configure(
-            "Treeview.Heading", 
-            background="#565b5e", 
-            foreground="white", 
-            relief="flat", 
-            font=("Arial", 10, "bold")
+            "Treeview.Heading",
+            background="#565b5e",
+            foreground="white",
+            relief="flat",
+            font=("Arial", 10, "bold"),
         )
-        
-        style.map("Treeview.Heading", background=[('active', '#343638')])
+
+        style.map("Treeview.Heading", background=[("active", "#343638")])
 
     def actualizar_todo(self) -> None:
         """
-        Función orquestadora que notifica a todas las pestañas para que 
+        Función orquestadora que notifica a todas las pestañas para que
         refresquen sus datos de manera simultánea cuando ocurre un cambio global.
 
         Returns:

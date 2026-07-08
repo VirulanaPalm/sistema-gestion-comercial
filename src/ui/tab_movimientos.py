@@ -30,19 +30,17 @@ class TabMovimientos(ctk.CTkFrame):
     def setup_ui(self) -> None:
         """
         Configura e inicializa los componentes visuales de la pestaña,
-        incluyendo el cuadro de texto para el registro y el botón de 
+        incluyendo el cuadro de texto para el registro y el botón de
         actualización.
         """
         self.textbox_movimientos = ctk.CTkTextbox(self, height=250)
         self.textbox_movimientos.pack(pady=20, fill="both", expand=True)
-        
+
         btn_refrescar = ctk.CTkButton(
-            self, 
-            text="Refrescar Historial", 
-            command=self.actualizar_movimientos
+            self, text="Refrescar Historial", command=self.actualizar_movimientos
         )
         btn_refrescar.pack(pady=10)
-        
+
         self.actualizar_movimientos()
 
     def actualizar_movimientos(self) -> None:
