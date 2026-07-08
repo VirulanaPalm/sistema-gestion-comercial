@@ -1,12 +1,16 @@
 """
-Módulo encargado del registro de ventas y la generación de métricas y auditoría.
-Interactúa directamente con el estado de la caja y el stock de productos.
+Módulo encargado del registro de ventas y la generación de métricas
+y auditoría. Interactúa directamente con el estado de la caja y el
+stock de productos.
 """
 
 import pandas as pd
 from datetime import datetime
 from src.utils.persistencia import cargar_datos, guardar_datos
-from src.logica.gestion_productos import buscar_producto_por_id, modificar_stock
+from src.logica.gestion_productos import (
+    buscar_producto_por_id, 
+    modificar_stock
+)
 from src.utils.logger import registrar_movimiento
 from src.logica.gestion_caja import obtener_estado_caja
 
@@ -26,11 +30,14 @@ def registrar_ticket(carrito: list) -> dict:
 
     Raises:
         PermissionError: Si la caja registradora está cerrada.
-        ValueError: Si el carrito está vacío o no hay stock suficiente para algún producto.
+        ValueError: Si el carrito está vacío o no hay stock
+            suficiente para algún producto.
     """
     caja = obtener_estado_caja()
     if caja["estado"] == "cerrada":
-        raise PermissionError("La caja está cerrada. Debes abrirla antes de vender.")
+        raise PermissionError(
+            "La caja está cerrada. Debes abrirla antes de vender."
+        )
 
     if not carrito:
         raise ValueError("El carrito está vacío.")
@@ -38,9 +45,14 @@ def registrar_ticket(carrito: list) -> dict:
     for item in carrito:
         producto = buscar_producto_por_id(item["id_producto"])
         if not producto:
-            raise ValueError(f"El producto ID {item['id_producto']} ya no existe.")
+            raise ValueError(
+                f"El producto ID {item['id_producto']} ya no existe."
+            )
         if producto["stock"] < item["cantidad"]:
-            raise ValueError(f"Stock insuficiente para '{producto['nombre']}'. Quedan {producto['stock']} un.")
+            raise ValueError(
+                f"Stock insuficiente para '{producto['nombre']}'. "
+                f"Quedan {producto['stock']} un."
+            )
 
     for item in carrito:
         producto = buscar_producto_por_id(item["id_producto"])
@@ -62,19 +74,27 @@ def registrar_ticket(carrito: list) -> dict:
     ventas.append(nuevo_ticket)
     guardar_datos(RUTA_VENTAS, ventas)
     
-    resumen_items = ", ".join([f"{i['cantidad']}x {i['nombre_producto']}" for i in carrito])
-    registrar_movimiento(f"VENTA TICKET #{id_ticket}: [{resumen_items}]. Total: ${total_ticket} (Ciclo {caja['ciclo_actual']})")
+    resumen_items = ", ".join(
+        [f"{i['cantidad']}x {i['nombre_producto']}" for i in carrito]
+    )
+    
+    registrar_movimiento(
+        f"VENTA TICKET #{id_ticket}: [{resumen_items}]. "
+        f"Total: ${total_ticket} (Ciclo {caja['ciclo_actual']})"
+    )
     
     return nuevo_ticket
 
 
 def mostrar_estadisticas() -> dict:
     """
-    Calcula los indicadores globales históricos procesando los tickets registrados utilizando Pandas.
+    Calcula los indicadores globales históricos procesando los
+    tickets registrados utilizando Pandas.
 
     Returns:
-        dict: Diccionario con las métricas clave (Total de Ingresos, Tickets Emitidos, 
-              Unidades Vendidas y Producto más vendido histórico).
+        dict: Diccionario con las métricas clave (Total de Ingresos,
+              Tickets Emitidos, Unidades Vendidas y Producto más 
+              vendido histórico).
     """
     ventas = cargar_datos(RUTA_VENTAS)
     if not ventas:
@@ -98,18 +118,21 @@ def mostrar_estadisticas() -> dict:
         "Total de Ingresos": f"${total_ingresos:.2f}",
         "Tickets Emitidos": str(len(ventas)),
         "Unidades Vendidas": str(int(total_unidades)),
-        "Producto más vendido histórico": f"{producto_top} ({amount_top} un.)"
+        "Producto más vendido histórico": (
+            f"{producto_top} ({amount_top} un.)"
+        )
     }
 
 
 def obtener_ventas_agrupadas_por_ciclo() -> dict:
     """
-    Agrupa todo el historial de ventas separándolo por ciclo (turno) de caja.
-    Ideal para estructuras de vista jerárquica como Treeview.
+    Agrupa todo el historial de ventas separándolo por ciclo (turno)
+    de caja. Ideal para estructuras de vista jerárquica como Treeview.
 
     Returns:
-        dict: Diccionario donde las claves son los ID de ciclo (turnos) y 
-              los valores son listas de tickets pertenecientes a ese ciclo.
+        dict: Diccionario donde las claves son los ID de ciclo (turnos)
+              y los valores son listas de tickets pertenecientes a ese
+              ciclo.
     """
     ventas = cargar_datos(RUTA_VENTAS)
     ciclos = {}
@@ -123,13 +146,14 @@ def obtener_ventas_agrupadas_por_ciclo() -> dict:
 
 def buscar_ticket_por_id(id_ticket: int) -> dict:
     """
-    Busca y devuelve el detalle completo de un ticket específico mediante su ID.
+    Busca y devuelve el detalle completo de un ticket específico
+    mediante su ID.
 
     Args:
         id_ticket (int): Número de identificación del ticket a buscar.
 
     Returns:
-        dict: Estructura de datos del ticket si existe, de lo contrario None.
+        dict: Estructura de datos del ticket si existe, sino None.
     """
     ventas = cargar_datos(RUTA_VENTAS)
     for ticket in ventas:

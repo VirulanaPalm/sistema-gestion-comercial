@@ -63,9 +63,27 @@ class AppComercial(ctk.CTk):
         """
         style = ttk.Style()
         style.theme_use("default")
-        style.configure("Treeview", background="#2b2b2b", foreground="white", rowheight=25, fieldbackground="#2b2b2b", bordercolor="#343638", borderwidth=0)
+        
+        style.configure(
+            "Treeview", 
+            background="#2b2b2b", 
+            foreground="white", 
+            rowheight=25, 
+            fieldbackground="#2b2b2b", 
+            bordercolor="#343638", 
+            borderwidth=0
+        )
+        
         style.map('Treeview', background=[('selected', '#1f538d')])
-        style.configure("Treeview.Heading", background="#565b5e", foreground="white", relief="flat", font=("Arial", 10, "bold"))
+        
+        style.configure(
+            "Treeview.Heading", 
+            background="#565b5e", 
+            foreground="white", 
+            relief="flat", 
+            font=("Arial", 10, "bold")
+        )
+        
         style.map("Treeview.Heading", background=[('active', '#343638')])
 
     def actualizar_todo(self) -> None:
@@ -79,4 +97,3 @@ class AppComercial(ctk.CTk):
         self.vista_productos.actualizar_lista_productos()
         self.vista_estadisticas.actualizar_estadisticas()
         self.vista_movimientos.actualizar_movimientos()
-        

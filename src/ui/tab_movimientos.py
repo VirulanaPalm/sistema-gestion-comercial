@@ -20,7 +20,8 @@ class TabMovimientos(ctk.CTkFrame):
 
         Args:
             master: El widget padre (contenedor de pestañas).
-            app: La instancia principal de la aplicación para comunicarse con otras vistas.
+            app: La instancia principal de la aplicación para comunicarse
+                 con otras vistas.
         """
         super().__init__(master, fg_color="transparent")
         self.app = app
@@ -29,15 +30,18 @@ class TabMovimientos(ctk.CTkFrame):
     def setup_ui(self) -> None:
         """
         Configura e inicializa los componentes visuales de la pestaña,
-        incluyendo el cuadro de texto para el registro y el botón de actualización.
-        
-        Returns:
-            None
+        incluyendo el cuadro de texto para el registro y el botón de 
+        actualización.
         """
         self.textbox_movimientos = ctk.CTkTextbox(self, height=250)
         self.textbox_movimientos.pack(pady=20, fill="both", expand=True)
         
-        ctk.CTkButton(self, text="Refrescar Historial", command=self.actualizar_movimientos).pack(pady=10)
+        btn_refrescar = ctk.CTkButton(
+            self, 
+            text="Refrescar Historial", 
+            command=self.actualizar_movimientos
+        )
+        btn_refrescar.pack(pady=10)
         
         self.actualizar_movimientos()
 
@@ -45,10 +49,6 @@ class TabMovimientos(ctk.CTkFrame):
         """
         Limpia el cuadro de texto y vuelve a cargar el historial completo
         de movimientos consultando al registro de logs del sistema.
-
-        Returns:
-            None
         """
         self.textbox_movimientos.delete("1.0", "end")
         self.textbox_movimientos.insert("end", leer_movimientos())
-        
