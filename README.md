@@ -38,8 +38,13 @@ Decidí entregar el programa con la base de datos totalmente limpia. Creo que no
 
 2. Activar el entorno virtual:
 
+En Windows:
    ```powershell
    .venv\Scripts\activate
+   ```
+En macOS y Linux:
+   ```bash
+   source .venv/bin/activate
    ```
 
 3. Instalar las librerías necesarias ejecutando en la consola:
@@ -55,6 +60,8 @@ Decidí entregar el programa con la base de datos totalmente limpia. Creo que no
 6. Ir a **Ventas**, abrir la caja y probar agregar los productos al carrito para finalizar la compra.
 
 7. Revisar la pestaña **Auditoría** para ver cómo se registró el turno.
+
+Nota: Los comandos de activacion podrian variar segun el sistema operativo
 
 ## Tecnologías y Librerías que usé
 Para este proyecto dividí el uso de herramientas entre las nativas de Python y un par de externas para mejorar la interfaz y el manejo de datos:
