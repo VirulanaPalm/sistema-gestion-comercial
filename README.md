@@ -29,12 +29,32 @@ Este es mi proyecto final de programación para la carrera de Ciencia de Datos e
 Decidí entregar el programa con la base de datos totalmente limpia. Creo que no teniendo ningún producto precargado se pueden probar al 100% las funcionalidades del programa desde cero.
 
 **Pasos para correrlo:**
-1. Instalar las librerías necesarias ejecutando en la consola:
-   `pip install customtkinter pandas`
-2. Ejecutar el archivo `main.py`.
-3. Ir a la pestaña **Productos** y crear un par de artículos.
-4. Ir a **Ventas**, abrir la caja y probar agregar los productos al carrito para finalizar la compra.
-5. Revisar la pestaña de **Auditoría** para ver cómo se registró el turno.
+
+1. Crear un entorno virtual dentro de la carpeta del proyecto:
+
+   ```bash
+   python -m venv .venv
+   ```
+
+2. Activar el entorno virtual:
+
+   ```powershell
+   .venv\Scripts\activate
+   ```
+
+3. Instalar las librerías necesarias ejecutando en la consola:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Ejecutar el archivo `main.py`.
+
+5. Ir a la pestaña **Productos** y crear un par de artículos.
+
+6. Ir a **Ventas**, abrir la caja y probar agregar los productos al carrito para finalizar la compra.
+
+7. Revisar la pestaña **Auditoría** para ver cómo se registró el turno.
 
 ## Tecnologías y Librerías que usé
 Para este proyecto dividí el uso de herramientas entre las nativas de Python y un par de externas para mejorar la interfaz y el manejo de datos:
